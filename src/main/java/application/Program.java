@@ -1,5 +1,6 @@
 package application;
 
+import db.DbException;
 import model.dao.DaoFactory;
 import model.dao.SellerDao;
 import model.dao.impl.SellerDaoJDBC;
@@ -49,9 +50,12 @@ public class Program {
         System.out.println("Update realizado com sucesso!");
 
         System.out.println("\n=== TEST 6: SELLER DELETE ===");
-        int sellerToDelete = 2;
-        Seller seller4 = new Seller();
-        System.out.println("Confirma a exclusão de " + sellerdao.findById(sellerToDelete).getName() + "? (S/N)");
+        int sellerToDelete = 21;
+        try {
+            System.out.println("Confirma a exclusão de " + sellerdao.findById(sellerToDelete).getName() + "? (S/N)");
+        } catch (NullPointerException e){
+            throw new DbException("No such id in database");
+        }
         sellerdao.deleteById(sellerToDelete);
         System.out.println("Vendedor excluído com sucesso!");
 

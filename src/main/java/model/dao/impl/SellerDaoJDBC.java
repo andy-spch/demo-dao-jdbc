@@ -1,6 +1,5 @@
 package model.dao.impl;
 
-import com.mysql.cj.protocol.Resultset;
 import db.DB;
 import db.DbException;
 import model.dao.SellerDao;
@@ -64,8 +63,7 @@ public class SellerDaoJDBC implements SellerDao {
             st = conn.prepareStatement(
                     "UPDATE seller " +
                             "SET Name=?, Email=?, BirthDate=?, BaseSalary=?, DepartmentId=? " +
-                            "WHERE Id=?",
-                    Statement.RETURN_GENERATED_KEYS
+                            "WHERE Id=?"
             );
 
             st.setString(1, seller.getName());
@@ -87,6 +85,26 @@ public class SellerDaoJDBC implements SellerDao {
     @Override
     public void deleteById(Integer id) {
 
+        PreparedStatement st = null;
+
+        try {
+            st = conn.prepareStatement(
+                    "DELETE FROM seller " +
+                            "WHERE Id=?"
+            );
+            st.setInt(1, id);
+
+            int rows = st.executeUpdate();
+
+            if (rows == 0){
+                throw new DbException("There is no such seller whith id = " + id);
+            }
+
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closeStatement(st);
+        }
     }
 
     @Override
@@ -101,7 +119,8 @@ public class SellerDaoJDBC implements SellerDao {
                     "WHERE seller.Id = ?");
 
             st.setInt(1, id);
-            rs =st.executeQuery();
+
+            rs = st.executeQuery();
             if(rs.next()){
                 Department dep = instantiateDepartment(rs);
                 Seller obj = instantiateSeller(rs,dep);
