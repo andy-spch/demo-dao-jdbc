@@ -171,14 +171,13 @@ public class SellerDaoJDBC implements SellerDao {
 
             // st.setInt(1, department.getId()); (LINHA REMOVIDA PEGA DO findByDepartment)
 
-            rs =st.executeQuery();
+            rs = st.executeQuery();
 
             List<Seller> list = new ArrayList<>();
 
             Map<Integer, Department> map = new HashMap<>();
 
             while (rs.next()){
-
                 Department dep = map.get(rs.getInt("DepartmentId"));
 
                 if (dep == null){
