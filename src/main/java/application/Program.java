@@ -38,9 +38,22 @@ public class Program {
         System.out.println("\n=== TEST 4: SELLER insert ===");
         Seller seller2 = new Seller(null, "Joaquin", "joaquin@gmail.com", new Date(), 5000.0, department);
         sellerdao.insert(seller2);
-        System.out.println("Update realizado com sucesso! Seu Id é " + seller2.getId());
+        System.out.println("Usuário inserido com sucesso! Seu Id é " + seller2.getId());
 
+        System.out.println("\n=== TEST 5: SELLER UPDATE ===");
+        Seller seller3 = new Seller();
+        seller3 = sellerdao.findById(1);
+        seller3.setName("Martha Waine");
+        seller3.setEmail("martha.waine@gmail.com");
+        sellerdao.update(seller3);
+        System.out.println("Update realizado com sucesso!");
 
+        System.out.println("\n=== TEST 6: SELLER DELETE ===");
+        int sellerToDelete = 2;
+        Seller seller4 = new Seller();
+        System.out.println("Confirma a exclusão de " + sellerdao.findById(sellerToDelete).getName() + "? (S/N)");
+        sellerdao.deleteById(sellerToDelete);
+        System.out.println("Vendedor excluído com sucesso!");
 
 
     }
